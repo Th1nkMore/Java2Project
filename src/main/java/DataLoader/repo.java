@@ -88,6 +88,46 @@ public class repo {
             this.created_at = created_at;
             this.closed_at = closed_at;
         }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Timestamp getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(Timestamp created_at) {
+            this.created_at = created_at;
+        }
+
+        public Timestamp getClosed_at() {
+            return closed_at;
+        }
+
+        public void setClosed_at(Timestamp closed_at) {
+            this.closed_at = closed_at;
+        }
     }
 
     public void get_issueInfo() throws IOException, ParseException {
@@ -104,8 +144,8 @@ public class repo {
                 n_closed_issues++;
 
             String description = ((String) obj.get("body"));
-            if (description != null)
-                description = description.length() > 255 ? description.substring(0, 255) : description;
+//            if (description != null)
+//                description = description.length() > 255 ? description.substring(0, 255) : description;
 
             String created_time = (String) obj.get("created_at");
             created_time = created_time.replace("T", " ");

@@ -55,13 +55,13 @@ public class DataLoader {
     }
 
     private static void insert_developerInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"Developer\" VALUES (Default,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"developer\" VALUES (Default,?,?,?)");
         repo.get_developerInfo();
         conn.setAutoCommit(false);
         repo.contributors.forEach(e -> {
             try {
-                stmt.setString(1, e.name);
-                stmt.setInt(2, e.n_contributions);
+                stmt.setInt(1, e.n_contributions);
+                stmt.setString(2, e.name);
                 stmt.setString(3, repo.name);
                 stmt.addBatch();
             } catch (SQLException ex) {
@@ -74,17 +74,17 @@ public class DataLoader {
     }
 
     private static void insert_issueInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"Issue\" VALUES (Default,?,?,?,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"issue\" VALUES (Default,?,?,?,?,?,?)");
         repo.get_issueInfo();
         conn.setAutoCommit(false);
         repo.issues.forEach(e -> {
             try {
-                stmt.setString(1, e.title);
-                stmt.setString(2, e.description);
-                stmt.setTimestamp(3, e.created_at);
-                stmt.setTimestamp(4, e.closed_at);
+                stmt.setTimestamp(1, e.created_at);
+                stmt.setTimestamp(2, e.closed_at);
+                stmt.setString(3, e.description);
+                stmt.setString(4, repo.name);
                 stmt.setString(5, e.state);
-                stmt.setString(6, repo.name);
+                stmt.setString(6, e.title);
                 stmt.addBatch();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
@@ -96,7 +96,7 @@ public class DataLoader {
     }
 
     private static void insert_releaseInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"Release\" VALUES (Default,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"release\" VALUES (Default,?,?,?)");
         repo.get_releaseInfo();
         conn.setAutoCommit(false);
         repo.releases.forEach(e -> {
@@ -114,7 +114,7 @@ public class DataLoader {
         conn.setAutoCommit(true);
     }
     private static void insert_commitInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"Commit\" VALUES (Default,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"commit\" VALUES (Default,?,?)");
         repo.get_commitInfo();
         conn.setAutoCommit(false);
         repo.commits.forEach(e -> {
