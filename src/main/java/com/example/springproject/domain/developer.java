@@ -19,7 +19,6 @@ public class developer {
     public int id;
     @NonNull
     public String name;
-    @NonNull
     public int contributions;
     @NonNull
     public String repo;

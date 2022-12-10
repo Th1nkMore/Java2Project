@@ -1,7 +1,14 @@
 package com.example.springproject.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table
 public class Repo {
+    @Id
+    int id;
     String name;
     int developerNum;
     int most_active_developer;
@@ -47,5 +54,13 @@ public class Repo {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDeveloperNum() {
+        return developerNum;
     }
 }

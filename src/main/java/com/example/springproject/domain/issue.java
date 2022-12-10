@@ -23,6 +23,7 @@ public class issue {
     public String description;
     @NonNull
     public Timestamp created_at;
+    @NonNull
     public Timestamp closed_at;
     @NonNull
     public String state;

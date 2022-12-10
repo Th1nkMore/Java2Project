@@ -1,5 +1,6 @@
 package com.example.springproject.web;
 
+
 import com.example.springproject.domain.Repo;
 import com.example.springproject.service.RepoService;
 import com.jayway.jsonpath.Configuration;
@@ -8,17 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 
 @RestController
-@RequestMapping("/repo")
+@RequestMapping("/repo/")
 public class RepoController {
 
     /**
      * 读取json文件，返回json串
-     * @param fileName
-     * @return
+     * @param fileName file name
+     * @return //
      */
     public static String readJsonFile(String fileName) {
         String jsonStr = "";
@@ -26,9 +29,9 @@ public class RepoController {
             File jsonFile = new File(fileName);
             FileReader fileReader = new FileReader(jsonFile);
 
-            Reader reader = new InputStreamReader(new FileInputStream(jsonFile), "utf-8");
+            Reader reader = new InputStreamReader(Files.newInputStream(jsonFile.toPath()), StandardCharsets.UTF_8);
             int ch = 0;
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             while ((ch = reader.read()) != -1) {
                 sb.append((char) ch);
             }
@@ -46,13 +49,14 @@ public class RepoController {
     @Autowired
     private RepoService repoService;
 
-    @GetMapping("/getInfo1")
-    public Repo getInfo_1(){
-        return repoService.findInfo();
+//    @GetMapping("/getInfo1")
+    @RequestMapping(value = "getInfo1", method= RequestMethod.GET)
+    public Repo getInfo_1(String repo){
+        return repoService.FindByRepoName(repo);
     }
 
     @GetMapping("/getInfo2")
-    public ArrayList<String> getInfo_2() throws IOException {
+    public ArrayList<String> getInfo_2() {
 
         ArrayList<String> arrayList = new ArrayList<>();
 
@@ -67,7 +71,7 @@ public class RepoController {
             }
 //            System.out.println(str);
         } catch (IOException e) {
-            System.out.println(e);
+            System.err.println(e);
         }
 
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
