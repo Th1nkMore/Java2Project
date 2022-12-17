@@ -51,16 +51,22 @@ public class repo {
 
 
     public void get_developerInfo() throws IOException, ParseException {
-        String url_ = String.format("https://api.github.com/repos/%s/%s/contributors?per_page=100", owner, name);
-        String content = getContent(url_);
-        JSONArray arr = (JSONArray) (new JSONParser().parse(content));
-        n_contributors = arr.size();
-        for (Object a : arr) {
-            JSONObject obj = (JSONObject) a;
-            String name_contributor = (String) obj.get("login");
-            int n_contributions = Integer.parseInt(obj.get("contributions").toString());
+        for (int page = 1; true; page++) {
+            String url_ = String.format("https://api.github.com/repos/%s/%s/contributors?per_page=100&page=%d", owner, name, page);
+            String content = getContent(url_);
+            JSONArray arr = (JSONArray) (new JSONParser().parse(content));
+            if (arr.size() == 0)
+                break;
+            else
+                n_contributors += arr.size();
 
-            contributors.add(new Contributor(name_contributor, n_contributions));
+            for (Object a : arr) {
+                JSONObject obj = (JSONObject) a;
+                String name_contributor = (String) obj.get("login");
+                int n_contributions = Integer.parseInt(obj.get("contributions").toString());
+
+                contributors.add(new Contributor(name_contributor, n_contributions));
+            }
         }
 
         int maxContributions = 0;
@@ -131,37 +137,42 @@ public class repo {
     }
 
     public void get_issueInfo() throws IOException, ParseException {
-        String url_ = String.format("https://api.github.com/repos/%s/%s/issues?state=all&per_page=100", owner, name);
-        String content = getContent(url_);
-        System.out.println(content);
-        JSONArray arr = (JSONArray) (new JSONParser().parse(content));
-        for (Object a : arr) {
-            JSONObject obj = (JSONObject) a;
-            String title = (String) obj.get("title");
-            String state = (String) obj.get("state");
-            if (Objects.equals(state, "open"))
-                n_open_issues++;
-            else
-                n_closed_issues++;
+        for (int page = 1; true; page++) {
+            String url_ = String.format("https://api.github.com/repos/%s/%s/issues?state=all&per_page=100&page=%d",
+                    owner, name, page);
+            String content = getContent(url_);
+            JSONArray arr = (JSONArray) (new JSONParser().parse(content));
+            if (arr.size() == 0)
+                break;
 
-            String description = ((String) obj.get("body"));
+            for (Object a : arr) {
+                JSONObject obj = (JSONObject) a;
+                String title = (String) obj.get("title");
+                String state = (String) obj.get("state");
+                if (Objects.equals(state, "open"))
+                    n_open_issues++;
+                else
+                    n_closed_issues++;
+
+                String description = (String) obj.get("body");
 //            if (description != null)
 //                description = description.length() > 255 ? description.substring(0, 255) : description;
 
-            String created_time = (String) obj.get("created_at");
-            created_time = created_time.replace("T", " ");
-            created_time = created_time.replace("Z", "");
-            Timestamp created_at = Timestamp.valueOf(created_time);
+                String created_time = (String) obj.get("created_at");
+                created_time = created_time.replace("T", " ");
+                created_time = created_time.replace("Z", "");
+                Timestamp created_at = Timestamp.valueOf(created_time);
 
-            String closed_time = (String) obj.get("closed_at");
-            Timestamp closed_at = null;
-            if (closed_time != null) {
-                closed_time = closed_time.replace("T", " ");
-                closed_time = closed_time.replace("Z", "");
-                closed_at = Timestamp.valueOf(closed_time);
+                String closed_time = (String) obj.get("closed_at");
+                Timestamp closed_at = null;
+                if (closed_time != null) {
+                    closed_time = closed_time.replace("T", " ");
+                    closed_time = closed_time.replace("Z", "");
+                    closed_at = Timestamp.valueOf(closed_time);
+                }
+
+                issues.add(new Issue(title, state, description, created_at, closed_at));
             }
-
-            issues.add(new Issue(title, state, description, created_at, closed_at));
         }
     }
 
@@ -176,39 +187,49 @@ public class repo {
     }
 
     public void get_releaseInfo() throws IOException, ParseException {
-        String url_ = String.format("https://api.github.com/repos/%s/%s/releases?per_page=100", owner, name);
-        String content = getContent(url_);
-        JSONArray arr = (JSONArray) (new JSONParser().parse(content));
-        n_releases = arr.size();
+        for (int page = 1; true; page++) {
+            String url_ = String.format("https://api.github.com/repos/%s/%s/releases?per_page=100&page=%d", owner, name, page);
+            String content = getContent(url_);
+            JSONArray arr = (JSONArray) (new JSONParser().parse(content));
+            if (arr.size() == 0)
+                break;
+            else
+                n_releases += arr.size();
 
-        for (Object a : arr) {
-            JSONObject obj = (JSONObject) a;
-            String tag_name = (String) obj.get("tag_name");
-            String published_time = (String) obj.get("published_at");
-            published_time = published_time.replace("T", " ");
-            published_time = published_time.replace("Z", "");
-            Timestamp published_at = Timestamp.valueOf(published_time);
+            for (Object a : arr) {
+                JSONObject obj = (JSONObject) a;
+                String tag_name = (String) obj.get("tag_name");
+                String published_time = (String) obj.get("published_at");
+                published_time = published_time.replace("T", " ");
+                published_time = published_time.replace("Z", "");
+                Timestamp published_at = Timestamp.valueOf(published_time);
 
-            releases.add(new Release(tag_name, published_at));
+                releases.add(new Release(tag_name, published_at));
+            }
         }
     }
 
     public void get_commitInfo() throws IOException, ParseException {
-        String url_ = String.format("https://api.github.com/repos/%s/%s/commits?per_page=100", owner, name);
-        String content = getContent(url_);
-        JSONArray arr = (JSONArray) (new JSONParser().parse(content));
-        n_commits = arr.size();
+        for (int page = 1; true; page++) {
+            String url_ = String.format("https://api.github.com/repos/%s/%s/commits?per_page=100&page=%d", owner, name, page);
+            String content = getContent(url_);
+            JSONArray arr = (JSONArray) (new JSONParser().parse(content));
+            if (arr.size() == 0)
+                break;
+            else
+                n_commits += arr.size();
 
-        for (Object a : arr) {
-            JSONObject obj = (JSONObject) a;
-            JSONObject commitObj = (JSONObject) obj.get("commit");
-            JSONObject committerObj = (JSONObject) commitObj.get("committer");
-            String commit_date = (String) committerObj.get("date");
-            commit_date = commit_date.replace("T", " ");
-            commit_date = commit_date.replace("Z", "");
-            Timestamp commit_time = Timestamp.valueOf(commit_date);
+            for (Object a : arr) {
+                JSONObject obj = (JSONObject) a;
+                JSONObject commitObj = (JSONObject) obj.get("commit");
+                JSONObject committerObj = (JSONObject) commitObj.get("committer");
+                String commit_date = (String) committerObj.get("date");
+                commit_date = commit_date.replace("T", " ");
+                commit_date = commit_date.replace("Z", "");
+                Timestamp commit_time = Timestamp.valueOf(commit_date);
 
-            commits.add(commit_time);
+                commits.add(commit_time);
+            }
         }
     }
 
@@ -217,6 +238,7 @@ public class repo {
         URL url = new URL(url_);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Bearer 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");
         connection.connect();
         InputStream inputStream = connection.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -252,9 +274,9 @@ public class repo {
 
     public void display_commits() {
         System.out.println("Number of commits: " + n_commits);
-        for (Timestamp timestamp : commits) {
-            System.out.println(timestamp);
-        }
+//        for (Timestamp timestamp : commits) {
+//            System.out.println(timestamp);
+//        }
     }
 
 }
