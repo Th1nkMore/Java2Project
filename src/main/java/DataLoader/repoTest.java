@@ -1,5 +1,6 @@
 package DataLoader;
 
+import com.example.springproject.domain.Repo;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -7,9 +8,9 @@ import java.io.IOException;
 public class repoTest {
     public static void main(String[] args) throws IOException, ParseException {
         // Sample 1: https://api.github.com/repos/shiqiyu/cpp/...
-        // Repo repo = new Repo("CPP", "ShiqiYu");
+         repo repo = new repo("CPP", "ShiqiYu");
         // Sample 2: https://api.github.com/repos/ultralytics/yolov5/...
-        repo repo = new repo("yolov5", "ultralytics");
+//        repo repo = new repo("yolov5", "ultralytics");
 
 //        // TODO 1 developers
 //        System.out.println("1 Developer Information");
@@ -18,7 +19,7 @@ public class repoTest {
 //
 //        // TODO 2 issues
 //        System.out.println("\n2 Issue Information");
-//        repo.get_issueInfo();
+        repo.get_issueInfo();
 //        repo.display_issues();
 //
 //        // TODO 3 releases
@@ -30,9 +31,6 @@ public class repoTest {
 //        System.out.println("\n4 Commit Information");
 //        repo.get_commitInfo();
 //        repo.display_commits();
-        String s = "hel1456lo56wor%^ld";
-        s=s.replaceAll("[^a-zA-Z]","");
-        System.out.println(s);
 
     }
 }

@@ -133,6 +133,7 @@ public class repo {
     public void get_issueInfo() throws IOException, ParseException {
         String url_ = String.format("https://api.github.com/repos/%s/%s/issues?state=all&per_page=100", owner, name);
         String content = getContent(url_);
+        System.out.println(content);
         JSONArray arr = (JSONArray) (new JSONParser().parse(content));
         for (Object a : arr) {
             JSONObject obj = (JSONObject) a;

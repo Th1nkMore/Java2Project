@@ -12,9 +12,11 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/repo/")
 public class RepoController {
 
@@ -49,13 +51,12 @@ public class RepoController {
     @Autowired
     private RepoService repoService;
 
-//    @GetMapping("/getInfo1")
-    @RequestMapping(value = "getInfo1", method= RequestMethod.GET)
+//    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "getInfo", method= RequestMethod.GET)
     public Repo getInfo_1(String repo){
         return repoService.FindByRepoName(repo);
     }
-
-    @GetMapping("/getInfo2")
+    @GetMapping("getInfo2")
     public ArrayList<String> getInfo_2() {
 
         ArrayList<String> arrayList = new ArrayList<>();
@@ -66,7 +67,7 @@ public class RepoController {
             BufferedReader in = new BufferedReader(new FileReader("src/temp.json"));
             String str;
             while ((str = in.readLine()) != null) {
-                System.out.println(str);
+//                System.out.println(str);
                 json = json.concat(str);
             }
 //            System.out.println(str);
@@ -75,14 +76,23 @@ public class RepoController {
         }
 
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
-
-        arrayList.add(""+JsonPath.read(document, "$.repo"));
         arrayList.add(""+JsonPath.read(document, "$.developers"));
-        arrayList.add(""+JsonPath.read(document, "$.most_active_developer.login"));
-        arrayList.add(""+JsonPath.read(document, "$.open_issues"));
-        arrayList.add(""+JsonPath.read(document, "$.close_issues"));
+        arrayList.add(""+JsonPath.read(document, "$.issue"));
+        arrayList.add(""+JsonPath.read(document, "$.developers"));
+        arrayList.add(""+JsonPath.read(document, "$.developers"));
+
 
         return arrayList;
     }
 
+//    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "test", method= RequestMethod.GET)
+    public Optional<Repo> Id_test(int id){
+        return repoService.FindById(id);
+    }
+
+    @RequestMapping(value = "SolveAvg", method= RequestMethod.GET)
+    public void SolveAvg(){
+        repoService.SolveAvgSolTime();
+    }
 }

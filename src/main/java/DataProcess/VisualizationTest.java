@@ -1,9 +1,7 @@
 package DataProcess;
 
 import DataLoader.DataLoader;
-import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.numbers.IntColumnType;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.api.HorizontalBarPlot;
 

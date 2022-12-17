@@ -1,11 +1,15 @@
 package com.example.springproject.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table
+@Getter @Setter
 public class Repo {
     @Id
     int id;
@@ -50,17 +54,5 @@ public class Repo {
         this.commit_times = 0;
         this.releases_top10_commits = 0;
         this.releases_commits = 0;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getDeveloperNum() {
-        return developerNum;
     }
 }
