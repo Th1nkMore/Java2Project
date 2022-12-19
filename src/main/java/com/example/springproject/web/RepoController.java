@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/repo/")
 public class RepoController {
 
@@ -53,46 +53,43 @@ public class RepoController {
 
 //    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "getInfo", method= RequestMethod.GET)
-    public Repo getInfo_1(String repo){
+    public Optional<Repo> getInfo_1(String repo){
         return repoService.FindByRepoName(repo);
     }
-    @GetMapping("getInfo2")
-    public ArrayList<String> getInfo_2() {
 
-        ArrayList<String> arrayList = new ArrayList<>();
+//    @GetMapping("getInfo2")
+//    public ArrayList<String> getInfo_2() {
+//
+//        ArrayList<String> arrayList = new ArrayList<>();
+//
+//        String json = "";
+//
+//        try {
+//            BufferedReader in = new BufferedReader(new FileReader("src/temp.json"));
+//            String str;
+//            while ((str = in.readLine()) != null) {
+////                System.out.println(str);
+//                json = json.concat(str);
+//            }
+////            System.out.println(str);
+//        } catch (IOException e) {
+//            System.err.println(e);
+//        }
+//
+//        Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
+////        System.out.println(json);
+//        arrayList.add(""+JsonPath.read(document, "$.developers"));
+//        arrayList.add(""+JsonPath.read(document, "$.issue"));
+//        arrayList.add(""+JsonPath.read(document, "$.developers"));
+//        arrayList.add(""+JsonPath.read(document, "$.developers"));
+//
+//
+//        return arrayList;
+//    }
 
-        String json = "";
-
-        try {
-            BufferedReader in = new BufferedReader(new FileReader("src/temp.json"));
-            String str;
-            while ((str = in.readLine()) != null) {
-//                System.out.println(str);
-                json = json.concat(str);
-            }
-//            System.out.println(str);
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-
-        Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
-        arrayList.add(""+JsonPath.read(document, "$.developers"));
-        arrayList.add(""+JsonPath.read(document, "$.issue"));
-        arrayList.add(""+JsonPath.read(document, "$.developers"));
-        arrayList.add(""+JsonPath.read(document, "$.developers"));
-
-
-        return arrayList;
-    }
-
-//    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "test", method= RequestMethod.GET)
     public Optional<Repo> Id_test(int id){
         return repoService.FindById(id);
     }
 
-    @RequestMapping(value = "SolveAvg", method= RequestMethod.GET)
-    public void SolveAvg(){
-        repoService.SolveAvgSolTime();
-    }
 }

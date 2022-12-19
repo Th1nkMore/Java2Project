@@ -3,19 +3,19 @@ package com.example.springproject.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
 @Getter @Setter
 public class Repo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     int id;
     String name;
     int developerNum;
-    int most_active_developer;
+    String most_active_developer;
     int open_issues;
     int close_issues;
     double issue_solve_average;
@@ -26,7 +26,7 @@ public class Repo {
     int releases_top10_commits;
     int releases_commits;
 
-    public Repo(String name, int developerNum, int most_active_developer, int open_issues, int close_issues, double issue_solve_average, int issue_solve_max_day, int issue_solve_min_day, int releases, int commit_times, int releases_top10_commits, int releases_commits) {
+    public Repo(String name, int developerNum, String most_active_developer, int open_issues, int close_issues, double issue_solve_average, int issue_solve_max_day, int issue_solve_min_day, int releases, int commit_times, int releases_top10_commits, int releases_commits) {
         this.name = name;
         this.developerNum = developerNum;
         this.most_active_developer = most_active_developer;
@@ -44,7 +44,7 @@ public class Repo {
     public Repo(){
         this.name = "name";
         this.developerNum = 0;
-        this.most_active_developer = 0;
+        this.most_active_developer = "";
         this.open_issues = 0;
         this.close_issues = 0;
         this.issue_solve_average = 0;

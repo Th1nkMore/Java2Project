@@ -18,7 +18,7 @@ public class commit {
     @Column(columnDefinition = "serial")
     public int id;
     @NonNull
-    public Timestamp date;
+    public Timestamp date; // getDate()
     @NonNull
     public String repo;
 }

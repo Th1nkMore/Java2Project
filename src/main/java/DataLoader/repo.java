@@ -52,7 +52,8 @@ public class repo {
 
     public void get_developerInfo() throws IOException, ParseException {
         for (int page = 1; true; page++) {
-            String url_ = String.format("https://api.github.com/repos/%s/%s/contributors?per_page=100&page=%d", owner, name, page);
+            String url_ = String.format("https://api.github.com/repos/%s/%s/contributors?anon=true&per_page=100&page=%d",
+                    owner, name, page);
             String content = getContent(url_);
             JSONArray arr = (JSONArray) (new JSONParser().parse(content));
             if (arr.size() == 0)
@@ -147,6 +148,8 @@ public class repo {
 
             for (Object a : arr) {
                 JSONObject obj = (JSONObject) a;
+                if (obj.get("pull_request") != null)
+                    continue;
                 String title = (String) obj.get("title");
                 String state = (String) obj.get("state");
                 if (Objects.equals(state, "open"))
