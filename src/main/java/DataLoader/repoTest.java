@@ -7,9 +7,9 @@ import java.io.IOException;
 public class repoTest {
     public static void main(String[] args) throws IOException, ParseException {
         // Sample 1: https://api.github.com/repos/shiqiyu/cpp/...
-        // repo repo = new repo("CPP", "ShiqiYu");
+        repo repo = new repo("CPP", "ShiqiYu");
         // Sample 2: https://api.github.com/repos/ultralytics/yolov5/...
-        repo repo = new repo("yolov5", "ultralytics");
+        // repo repo = new repo("yolov5", "ultralytics");
 
         // TODO 1 developers
         System.out.println("1 Developer Information");

@@ -13,6 +13,7 @@ import java.util.Properties;
 
 public class DataLoader {
     static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DataLoader.class.getName());
+
     public static void main(String[] args) throws IOException, ParseException, SQLException {
 
         // Preparation: Read Config
@@ -40,6 +41,7 @@ public class DataLoader {
 
         // Prepare repo
         repo repo = new repo("yolov5", "ultralytics");
+        // repo repo = new repo("CPP", "ShiqiYu");
 
         // Insert Developer Information
         insert_developerInfo(conn, repo);
@@ -52,6 +54,9 @@ public class DataLoader {
 
         // Insert Commit Information
         insert_commitInfo(conn, repo);
+
+        // Insert Repo Information
+        insert_repoInfo(conn, repo);
     }
 
     private static void insert_developerInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
@@ -79,8 +84,8 @@ public class DataLoader {
         conn.setAutoCommit(false);
         repo.issues.forEach(e -> {
             try {
-                stmt.setTimestamp(1, e.created_at);
-                stmt.setTimestamp(2, e.closed_at);
+                stmt.setTimestamp(1, e.closed_at);
+                stmt.setTimestamp(2, e.created_at);
                 stmt.setString(3, e.description);
                 stmt.setString(4, repo.name);
                 stmt.setString(5, e.state);
@@ -113,6 +118,7 @@ public class DataLoader {
         conn.commit();
         conn.setAutoCommit(true);
     }
+
     private static void insert_commitInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"commit\" VALUES (Default,?,?)");
         repo.get_commitInfo();
@@ -126,6 +132,35 @@ public class DataLoader {
                 throw new RuntimeException(ex);
             }
         });
+        stmt.executeBatch();
+        conn.commit();
+        conn.setAutoCommit(true);
+    }
+
+    private static void insert_repoInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"repo\" VALUES (Default,?,?,?,?,?,?,?,?,?,?,?,?)");
+        repo.get_commitInfo();
+        conn.setAutoCommit(false);
+
+        try {
+            stmt.setInt(1, repo.n_closed_issues);
+            stmt.setInt(2, repo.n_commits);
+            stmt.setInt(3, repo.n_contributors);
+            // todo 以下三项不在这里展示，可以考虑不设这几列
+            stmt.setDouble(4, -1);
+            stmt.setInt(5, -1);
+            stmt.setInt(6, -1);
+            //
+            stmt.setString(7, repo.most_active_contributor.name);
+            stmt.setString(8, repo.name);
+            stmt.setInt(9, repo.n_open_issues);
+            stmt.setInt(10, repo.n_releases);
+            stmt.setInt(11, repo.n_open_issues);
+            stmt.setInt(12, repo.n_open_issues);
+            stmt.addBatch();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         stmt.executeBatch();
         conn.commit();
         conn.setAutoCommit(true);
