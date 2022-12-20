@@ -16,33 +16,93 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * The type Repo.
+ */
 public class repo {
+    /**
+     * The Name.
+     */
     public String name;
+    /**
+     * The Owner.
+     */
     public String owner;
+    /**
+     * The N contributors.
+     */
     public int n_contributors;
+    /**
+     * The Contributors.
+     */
     public ArrayList<Contributor> contributors = new ArrayList<>();
+    /**
+     * The Most active contributor.
+     */
     public Contributor most_active_contributor;
+    /**
+     * The N open issues.
+     */
     public int n_open_issues;
+    /**
+     * The N closed issues.
+     */
     public int n_closed_issues;
+    /**
+     * The Issues.
+     */
     public ArrayList<Issue> issues = new ArrayList<>();
     // todo: issue的平均解决时间交给数据库方面计算
 
+    /**
+     * The N releases.
+     */
     public int n_releases;
+    /**
+     * The Releases.
+     */
     public ArrayList<Release> releases = new ArrayList<>();
+    /**
+     * The N commits.
+     */
     public int n_commits;
+    /**
+     * The Commits.
+     */
     public ArrayList<Timestamp> commits = new ArrayList<>();
     // todo: release之间的commits数交给数据库方面计算
 
 
+    /**
+     * Instantiates a new Repo.
+     *
+     * @param n the n
+     * @param o the o
+     */
     public repo(String n, String o) {
         name = n;
         owner = o;
     }
 
+    /**
+     * The type Contributor.
+     */
     public static class Contributor {
+        /**
+         * The Name.
+         */
         String name;
+        /**
+         * The N contributions.
+         */
         int n_contributions;
 
+        /**
+         * Instantiates a new Contributor.
+         *
+         * @param n  the n
+         * @param nc the nc
+         */
         public Contributor(String n, int nc) {
             name = n;
             n_contributions = nc;
@@ -50,6 +110,12 @@ public class repo {
     }
 
 
+    /**
+     * Gets developer info.
+     *
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public void get_developerInfo() throws IOException, ParseException {
         for (int page = 1; true; page++) {
             String url_ = String.format("https://api.github.com/repos/%s/%s/contributors?anon=true&per_page=100&page=%d",
@@ -81,13 +147,40 @@ public class repo {
         most_active_contributor = mac;
     }
 
+    /**
+     * The type Issue.
+     */
     public static class Issue {
+        /**
+         * The Title.
+         */
         String title;
+        /**
+         * The State.
+         */
         String state;
+        /**
+         * The Description.
+         */
         String description;
+        /**
+         * The Created at.
+         */
         Timestamp created_at;
+        /**
+         * The Closed at.
+         */
         Timestamp closed_at;
 
+        /**
+         * Instantiates a new Issue.
+         *
+         * @param title       the title
+         * @param state       the state
+         * @param description the description
+         * @param created_at  the created at
+         * @param closed_at   the closed at
+         */
         public Issue(String title, String state, String description, Timestamp created_at, Timestamp closed_at) {
             this.title = title;
             this.state = state;
@@ -96,47 +189,103 @@ public class repo {
             this.closed_at = closed_at;
         }
 
+        /**
+         * Gets title.
+         *
+         * @return the title
+         */
         public String getTitle() {
             return title;
         }
 
+        /**
+         * Sets title.
+         *
+         * @param title the title
+         */
         public void setTitle(String title) {
             this.title = title;
         }
 
+        /**
+         * Gets state.
+         *
+         * @return the state
+         */
         public String getState() {
             return state;
         }
 
+        /**
+         * Sets state.
+         *
+         * @param state the state
+         */
         public void setState(String state) {
             this.state = state;
         }
 
+        /**
+         * Gets description.
+         *
+         * @return the description
+         */
         public String getDescription() {
             return description;
         }
 
+        /**
+         * Sets description.
+         *
+         * @param description the description
+         */
         public void setDescription(String description) {
             this.description = description;
         }
 
+        /**
+         * Gets created at.
+         *
+         * @return the created at
+         */
         public Timestamp getCreated_at() {
             return created_at;
         }
 
+        /**
+         * Sets created at.
+         *
+         * @param created_at the created at
+         */
         public void setCreated_at(Timestamp created_at) {
             this.created_at = created_at;
         }
 
+        /**
+         * Gets closed at.
+         *
+         * @return the closed at
+         */
         public Timestamp getClosed_at() {
             return closed_at;
         }
 
+        /**
+         * Sets closed at.
+         *
+         * @param closed_at the closed at
+         */
         public void setClosed_at(Timestamp closed_at) {
             this.closed_at = closed_at;
         }
     }
 
+    /**
+     * Gets issue info.
+     *
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public void get_issueInfo() throws IOException, ParseException {
         for (int page = 1; true; page++) {
             String url_ = String.format("https://api.github.com/repos/%s/%s/issues?state=all&per_page=100&page=%d",
@@ -179,16 +328,37 @@ public class repo {
         }
     }
 
+    /**
+     * The type Release.
+     */
     public static class Release {
+        /**
+         * The Tag name.
+         */
         String tag_name;
+        /**
+         * The Published at.
+         */
         Timestamp published_at;
 
+        /**
+         * Instantiates a new Release.
+         *
+         * @param tn the tn
+         * @param pa the pa
+         */
         public Release(String tn, Timestamp pa) {
             tag_name = tn;
             published_at = pa;
         }
     }
 
+    /**
+     * Gets release info.
+     *
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public void get_releaseInfo() throws IOException, ParseException {
         for (int page = 1; true; page++) {
             String url_ = String.format("https://api.github.com/repos/%s/%s/releases?per_page=100&page=%d", owner, name, page);
@@ -212,6 +382,12 @@ public class repo {
         }
     }
 
+    /**
+     * Gets commit info.
+     *
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public void get_commitInfo() throws IOException, ParseException {
         for (int page = 1; true; page++) {
             String url_ = String.format("https://api.github.com/repos/%s/%s/commits?per_page=100&page=%d", owner, name, page);
@@ -249,7 +425,10 @@ public class repo {
         return bufferedReader.readLine();
     }
 
-    // TODO Display methods
+    /**
+     * Display contributors.
+     */
+// TODO Display methods
     public void display_contributors() {
         System.out.println("Number of contributors: " + n_contributors);
         for (Contributor c : contributors) {
@@ -258,6 +437,9 @@ public class repo {
         System.out.println("Most active contributor: " + most_active_contributor.name);
     }
 
+    /**
+     * Display issues.
+     */
     public void display_issues() {
         System.out.println("Number of open issues: " + n_open_issues);
         System.out.println("Number of closed issues: " + n_closed_issues);
@@ -268,6 +450,9 @@ public class repo {
         }
     }
 
+    /**
+     * Display releases.
+     */
     public void display_releases() {
         System.out.println("Number of releases: " + n_releases);
         for (Release release : releases) {
@@ -275,6 +460,9 @@ public class repo {
         }
     }
 
+    /**
+     * Display commits.
+     */
     public void display_commits() {
         System.out.println("Number of commits: " + n_commits);
 //        for (Timestamp timestamp : commits) {

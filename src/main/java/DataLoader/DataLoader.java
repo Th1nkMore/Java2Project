@@ -138,25 +138,17 @@ public class DataLoader {
     }
 
     private static void insert_repoInfo(@NotNull Connection conn, repo repo) throws SQLException, IOException, ParseException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"repo\" VALUES (Default,?,?,?,?,?,?,?,?,?,?,?,?)");
-        repo.get_commitInfo();
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO \"repo\" VALUES (Default,?,?,?,?,?,?,?)");
         conn.setAutoCommit(false);
 
         try {
             stmt.setInt(1, repo.n_closed_issues);
             stmt.setInt(2, repo.n_commits);
             stmt.setInt(3, repo.n_contributors);
-            // todo 以下三项不在这里展示，可以考虑不设这几列
-            stmt.setDouble(4, -1);
-            stmt.setInt(5, -1);
-            stmt.setInt(6, -1);
-            //
-            stmt.setString(7, repo.most_active_contributor.name);
-            stmt.setString(8, repo.name);
-            stmt.setInt(9, repo.n_open_issues);
-            stmt.setInt(10, repo.n_releases);
-            stmt.setInt(11, repo.n_open_issues);
-            stmt.setInt(12, repo.n_open_issues);
+            stmt.setString(4, repo.most_active_contributor.name);
+            stmt.setString(5, repo.name);
+            stmt.setInt(6, repo.n_open_issues);
+            stmt.setInt(7, repo.n_releases);
             stmt.addBatch();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
